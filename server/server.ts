@@ -3,7 +3,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import * as dotenv from 'dotenv';
 import OpenAI from "openai";
-import { sleep } from "openai/core";
 
 dotenv.config();
 const port = 8000;
@@ -17,6 +16,10 @@ const openai = new OpenAI({
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+async function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function chatGPTConversation(req: Request, res: Response, next: NextFunction) {
     const prompt = req.query.prompt as string;
@@ -54,17 +57,12 @@ async function chatGPTConversation(req: Request, res: Response, next: NextFuncti
         't', 'h', 'a', 't', ' ', 'p', 'o', 'w', 'e', 'r', 's', ' ', 't', 'h', 'e', ' ', 's', 'u', 'n', '.'
     ];
 
-    async function sendCharacter(index: number) {
-        if (index < charStream.length) {
-            res.write(`data: ${charStream[index]}\n\n`);
-            await sleep(100);
-            sendCharacter(index + 1);
-        } else {
-            res.end();
-        }
+    for (const chunk of charStream) {
+        res.write(`data: ${chunk}\n\n`);
+        await sleep(20);
     }
 
-    sendCharacter(0);
+    res.end();
 }
 
 app.get("/chatgpt", chatGPTConversation);
