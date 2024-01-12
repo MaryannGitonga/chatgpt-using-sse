@@ -23,6 +23,7 @@ async function sleep(ms: number): Promise<void> {
 
 async function chatGPTConversation(req: Request, res: Response, next: NextFunction) {
     const prompt = req.query.prompt as string;
+    console.log(prompt);
     // let completion = openai.chat.completions.create({
     //     model: "gpt-3.5-turbo",
     //     messages: [
@@ -61,6 +62,8 @@ async function chatGPTConversation(req: Request, res: Response, next: NextFuncti
         res.write(`data: ${chunk}\n\n`);
         await sleep(20);
     }
+
+    res.write(`data:DONE\n\n`)
 
     res.end();
 }

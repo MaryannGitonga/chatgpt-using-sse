@@ -23,25 +23,29 @@ const inputStyle: React.CSSProperties = {
 const App: React.FC = () => {
   const [ inputValue, setInputValue ] = useState<string>('');
   const [ prompt, setPrompt ] = useState<string>('');
+  const [ tempPrompt, setTempPrompt ] = useState<string>('');
   const [ response, setResponse ] = useState<string>('');
 
   useEffect(() => {
-    if (prompt.trim() !== '') {
-      const eventSource = new EventSource('http://localhost:8000/chatgpt?prompt=' + encodeURIComponent(prompt))
+    if (tempPrompt.trim() !== '') {
+      const eventSource = new EventSource('http://localhost:8000/chatgpt?prompt=' + encodeURIComponent(tempPrompt))
 
-      eventSource.addEventListener('message', (event) => {
-        const newData = event.data;
-        setResponse((prevResponse) => prevResponse + newData);
-      });
-
-      return () => {
-        eventSource.close();
-      }
+      eventSource.onmessage = (event) => {
+        if(event.data.trim() !== 'DONE'){
+          const newData = event.data;
+          setResponse((prevResponse) => prevResponse.concat(newData));
+        } else{
+          setTempPrompt(''); 
+          eventSource.close();
+        }
+      };
     }
-  }, [prompt]);
+  }, [tempPrompt]);
 
   const handleSubmit = () => {
+    setResponse(''); //clean up the response state
     setPrompt(inputValue);
+    setTempPrompt(inputValue);
     setInputValue('');
   }
 
