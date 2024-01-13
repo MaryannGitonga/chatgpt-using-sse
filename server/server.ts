@@ -40,21 +40,6 @@ async function chatGPTConversation(req: Request, res: Response, next: NextFuncti
 
     res.writeHead(200, headers);
 
-    // const charStream = [
-    //     'A', ' ', 't', 'o', 'k', 'a', 'm', 'a', 'k', ' ', 'i', 's', ' ', 'a', ' ', 'd', 'e', 'v', 'i', 'c', 'e',
-    //     ' ', 'u', 's', 'e', 'd', ' ', 'i', 'n', ' ', 'e', 'x', 'p', 'e', 'r', 'i', 'm', 'e', 'n', 't', 'a', 'l', ' ',
-    //     'f', 'u', 's', 'i', 'o', 'n', ' ', 'r', 'e', 's', 'e', 'a', 'r', 'c', 'h', ' ', 't', 'o', ' ', 'c', 'o', 'n',
-    //     't', 'a', 'i', 'n', ' ', 'h', 'o', 't', ' ', 'p', 'l', 'a', 's', 'm', 'a', ' ', 'a', 'n', 'd', ' ', 'p', 'r',
-    //     'o', 'd', 'u', 'c', 'e', ' ', 'c', 'o', 'n', 't', 'r', 'o', 'l', 'l', 'e', 'd', ' ', 'n', 'u', 'c', 'l', 'e',
-    //     'a', 'r', ' ', 'f', 'u', 's', 'i', 'o', 'n', ' ', 'r', 'e', 'a', 'c', 't', 'i', 'o', 'n', 's', '.', ' ', 'T',
-    //     'h', 'e', ' ', 'g', 'o', 'a', 'l', ' ', 'o', 'f', ' ', 't', 'h', 'e', 's', 'e', ' ', 'e', 'x', 'p', 'e', 'r',
-    //     'i', 'm', 'e', 'n', 't', 's', ' ', 'i', 's', ' ', 't', 'o', ' ', 'h', 'a', 'r', 'n', 'e', 's', 's', ' ', 't',
-    //     'h', 'e', ' ', 'e', 'n', 'e', 'r', 'g', 'y', ' ', 'r', 'e', 'l', 'e', 'a', 's', 'e', 'd', ' ', 'b', 'y', ' ',
-    //     'f', 'u', 's', 'i', 'o', 'n', ' ', 'r', 'e', 'a', 'c', 't', 'i', 'o', 'n', 's', ',', ' ', 'w', 'h', 'i', 'c',
-    //     'h', ' ', 'i', 's', ' ', 't', 'h', 'e', ' ', 's', 'a', 'm', 'e', ' ', 'p', 'r', 'o', 'c', 'e', 's', 's', ' ',
-    //     't', 'h', 'a', 't', ' ', 'p', 'o', 'w', 'e', 'r', 's', ' ', 't', 'h', 'e', ' ', 's', 'u', 'n', '.'
-    // ];
-
     for await (const chunk of chatStream){
         res.write(`data: ${chunk.choices[0]?.delta?.content}\n\n`);
         await sleep(20);
