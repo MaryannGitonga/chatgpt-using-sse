@@ -28,13 +28,16 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (tempPrompt.trim() !== '') {
+      // Open a new SSE connection to the stream endpoint
       const eventSource = new EventSource('http://localhost:8000/chatgpt?prompt=' + encodeURIComponent(tempPrompt))
 
+      // Subscribe to all events streaming in
       eventSource.onmessage = (event) => {
         if(event.data.trim() !== 'undefined'){
           const newData = event.data;
           setResponse((prevResponse) => prevResponse.concat(newData));
         } else{
+          // close the SSE connection if the server sends an event message with data 'undefined'
           setTempPrompt(''); 
           eventSource.close();
         }
