@@ -31,7 +31,7 @@ const App: React.FC = () => {
       const eventSource = new EventSource('http://localhost:8000/chatgpt?prompt=' + encodeURIComponent(tempPrompt))
 
       eventSource.onmessage = (event) => {
-        if(event.data.trim() !== 'DONE'){
+        if(event.data.trim() !== 'undefined'){
           const newData = event.data;
           setResponse((prevResponse) => prevResponse.concat(newData));
         } else{
